@@ -1,7 +1,7 @@
 #ifndef DATA_POINT_H
 #define DATA_POINT_H
 
-#include <stddef.h>
+#include <stdio.h>
 
 typedef struct _DataPoint {
     size_t dims;
