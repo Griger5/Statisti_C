@@ -1,27 +1,17 @@
+#include <stdlib.h>
+
 #include "stats_calculate.h"
+#include "helper_funcs.h"
+#include "vector_operations.h"
 
-double sum_array(double *array, size_t length) {
-    double sum = 0;
+double std_var_biased_1d(DataPoint **data, size_t rec_count, int dim_to_calc) {
+    double *mean_diff_vector = data_mean_diff(data, rec_count, dim_to_calc);
+    double *mean_diff_vector_square = multi_by_element(mean_diff_vector, mean_diff_vector, rec_count);
 
-    for (size_t i = 0; i < length; i++) {
-        sum += array[i]; 
-    }
+    double sum_mean_diff = sum_vector_elem(mean_diff_vector_square, rec_count);
 
-    return sum;
-}
+    free(mean_diff_vector);
+    free(mean_diff_vector_square);
 
-double sum_data_1d(DataPoint **data, size_t rec_count, int dim_to_sum) {
-    double sum = 0;
-
-    for (size_t i = 0; i < rec_count; i++) {
-        sum += data[i]->data[dim_to_sum]; 
-    }
-
-    return sum;
-}
-
-double arith_mean_data(DataPoint **data, size_t rec_count, int dim_to_sum) {
-    double sum = sum_data_1d(data, rec_count, dim_to_sum);
-
-    return sum/rec_count;
+    return sum_mean_diff/rec_count;
 }
