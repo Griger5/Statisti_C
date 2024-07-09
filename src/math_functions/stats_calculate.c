@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 
 #include "stats_calculate.h"
 #include "helper_funcs.h"
@@ -14,4 +15,10 @@ double std_var_biased_1d(DataPoint **data, size_t rec_count, int dim_to_calc) {
     free(mean_diff_vector_square);
 
     return sum_mean_diff/rec_count;
+}
+
+double std_dev_uncorr_1d(DataPoint **data, size_t rec_count, int dim_to_calc) {
+    double std_var_biased = std_var_biased_1d(data, rec_count, dim_to_calc);
+
+    return sqrt(std_var_biased);
 }

@@ -1,8 +1,9 @@
 CC = gcc
 CFLAGS = -Wall -Wextra
+LIBS = -lm
 
 run: clean data_point.o lin_reg.o stats_calculate.o file_operation.o temp_main.o
-	$(CC) $(CFLAGS) -o run build/data_point.o build/lin_reg.o build/vector_operations.o build/helper_funcs.o build/stats_calculate.o build/file_operation.o build/temp_main.o
+	$(CC) $(CFLAGS) -o run build/data_point.o build/lin_reg.o build/vector_operations.o build/helper_funcs.o build/stats_calculate.o build/file_operation.o build/temp_main.o $(LIBS)
 
 temp_main.o:
 	$(CC) $(CFLAGS) -c src/temp_main.c -o build/temp_main.o
