@@ -2,8 +2,8 @@ CC = gcc
 CFLAGS = -Wall -Wextra
 LIBS = -lm
 
-run: clean data_point.o labeled_data_point.o lin_reg.o stats_calculate.o file_operation.o temp_main.o
-	$(CC) $(CFLAGS) -o run build/data_point.o build/labeled_data_point.o build/lin_reg.o build/vector_operations.o build/helper_funcs.o build/stats_calculate.o build/file_operation.o build/temp_main.o $(LIBS)
+run: clean data_point.o labeled_data_point.o lin_reg.o stats_calculate.o file_operation.o label_list.o temp_main.o
+	$(CC) $(CFLAGS) -o run build/data_point.o build/labeled_data_point.o build/lin_reg.o build/vector_operations.o build/helper_funcs.o build/stats_calculate.o build/file_operation.o build/label_list.o build/temp_main.o $(LIBS)
 
 temp_main.o:
 	$(CC) $(CFLAGS) -c src/temp_main.c -o build/temp_main.o
@@ -25,6 +25,9 @@ helper_funcs.o: vector_operations.o
 
 vector_operations.o:
 	$(CC) $(CFLAGS) -c src/math_functions/vector_operations.c -o build/vector_operations.o
+
+label_list.o:
+	$(CC) $(CFLAGS) -c src/utils/label_list.c -o build/label_list.o
 
 file_operation.o:
 	$(CC) $(CFLAGS) -c src/utils/file_operation.c -o build/file_operation.o
