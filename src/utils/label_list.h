@@ -1,22 +1,15 @@
 #ifndef LABEL_LIST_H
 #define LABEL_LIST_H
 
-typedef struct _Node {
-    int number;
-    char *label;
-    struct _Node *next;
-} Node;
-
 typedef struct _LabelList {
-    Node *head;
+    size_t size;
+    char **label_table;
 } LabelList;
 
-void initialize_list(LabelList *);
+void add_label(LabelList *, char *);
 
-void add_element(LabelList *, int, char *);
+int check_if_exists(LabelList, char *);
 
-char *get_label_by_idx(LabelList *, int);
-
-int count_elements(LabelList *);
+void free_label_list(LabelList *);
 
 #endif

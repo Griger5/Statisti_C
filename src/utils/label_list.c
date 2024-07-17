@@ -1,59 +1,50 @@
 #include <stdlib.h>
-
-#include <stdio.h>
+#include <string.h>
 
 #include "label_list.h"
 
-void initialize_list(LabelList *list) {
-    list->head = NULL;
+void add_label(LabelList *list, char *label) {
+    if (list->label_table == NULL) {
+        list->size = 1;
+        char **temp = malloc(sizeof(char *));
+        if (temp != NULL) {
+            list->label_table = temp;
+            list->label_table[0] = label;
+        }
+
+        return;
+    }
+    else {
+        list->size++;
+        size_t temp_size = list->size;
+        char **temp = realloc(list->label_table, temp_size * sizeof(char *));
+        if (temp != NULL) {
+            list->label_table = temp;
+            list->label_table[temp_size-1] = label;
+        }
+
+        return;
+    }
 }
 
-void add_element(LabelList *list, int number, char *label) {
-    Node *new_node = malloc(sizeof(Node));
+int check_if_exists(LabelList list, char *to_check) {
+    size_t length = list.size;
+    int exists;
 
-    if (new_node == NULL) return;
-
-    new_node->number = number;
-    new_node->label = label;
-
-    Node *previous = NULL;
-    Node *current = list->head;
-
-    while (current != NULL) {
-        previous = current;      
-        current = current->next; 
+    for (size_t i = 0; i < length; i++) {
+        exists = strcmp(list.label_table[i], to_check);
+        if (exists == 0) return i;
     }
 
-    new_node->next = current; 
-    
-    if (previous == NULL) {
-        list->head = new_node;
-    }
-    else previous->next = new_node; 
+    return -1;
 }
 
-char *get_label_by_idx(LabelList *list, int index) {
-    int i = 0;
-    Node *current = list->head;
-    
-    while (current->next != NULL && i < index) {
-        current = current->next;
-        i++;
+void free_label_list(LabelList *list) {
+    size_t size = list->size;
+
+    for (size_t i = 0; i < size; i++) {
+        free(list->label_table[i]);
     }
 
-    if (i < index) return 0;
-
-    return current->label;
-}
-
-int count_elements(LabelList *list) {
-    int count = 0;
-    Node *current = list->head;
-
-    while (current != NULL) {
-        current = current->next;
-        count++;
-    }
-
-    return count;
+    free(list->label_table);
 }
