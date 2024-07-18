@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <ctype.h>
+
 #include "labeled_data_point.h"
 #include "../../utils/file_operation.h"
 
@@ -9,11 +11,12 @@ void print_labeled_data(LabeledDataPoint *a) {
     for (size_t i = 0; i<a->dims; i++) {
         printf("%f\n", a->data[i]);
     }
-    printf("label: %s\n", a->label);
+    printf("label_num: %d\n", a->label_num);
 }
 
-LabeledDataPoint *create_labeled_data_point(char *data, size_t rec_count) {
+LabeledDataPoint *create_labeled_data_point(char *data, size_t rec_count, LabelList *label_list) {
     char *token;
+    char *end;
     LabeledDataPoint *point = malloc(sizeof(size_t) + rec_count*sizeof(double) + sizeof(char *));
     
     point->dims = rec_count-1;
@@ -27,14 +30,28 @@ LabeledDataPoint *create_labeled_data_point(char *data, size_t rec_count) {
     };
 
     token = strtok(NULL, ",");
-    strncpy(point->label, token, 31);
-    point->label[strcspn(point->label, "\n")] = 0;
-    point->label[32] = 0;
+    end = token + strlen(token) - 1;
+    while(end > token && isspace((unsigned char)*end)) end--;
+    end[1] = '\0';
+
+    char *token_copy = malloc(strlen(token)+1);
+    strcpy(token_copy, token);
+
+    int index_in_list = check_if_exists(*label_list, token);
+
+    if (index_in_list == -1) {
+        add_label(label_list, token_copy);
+        point->label_num = label_list->size-1;
+    }
+    else {
+        point->label_num = index_in_list;
+        free(token_copy);
+    }
 
     return point;
 }
 
-LabeledDataPoint **load_labeled_data_csv(FILE *file, size_t num_records, size_t num_fields) {
+LabeledDataPoint **load_labeled_data_csv(FILE *file, size_t num_records, size_t num_fields, LabelList *label_list) {
     LabeledDataPoint **all_data = malloc(num_records*(sizeof(size_t) + num_fields*sizeof(double)));
 
     LabeledDataPoint *current_data_point;
@@ -45,11 +62,13 @@ LabeledDataPoint **load_labeled_data_csv(FILE *file, size_t num_records, size_t 
     for (size_t i = 0; i < num_records; i++) {
         chars_num = getline(&current_record, &n, file);
         if (chars_num != -1) {
-            current_data_point = create_labeled_data_point(current_record, num_fields);
+            current_data_point = create_labeled_data_point(current_record, num_fields, label_list);
         }
         all_data[i] = current_data_point;
+        free(current_record);
+        current_record = NULL;
+        n = 0;
     }
-    free(current_record);
 
     return all_data;
 }

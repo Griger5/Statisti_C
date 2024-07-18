@@ -12,7 +12,7 @@ void print_data(DataPoint *a) {
 
 DataPoint *create_data_point(char *data, size_t dims) {
     char *token;
-    DataPoint *point = malloc(sizeof(size_t) + dims*sizeof(double));
+    DataPoint *point = malloc(sizeof(*point) + dims*sizeof(double));
     
     point->dims = dims;
 
@@ -28,7 +28,7 @@ DataPoint *create_data_point(char *data, size_t dims) {
 }
 
 DataPoint **load_data_csv(FILE *file, size_t num_records, size_t num_fields) {
-    DataPoint **all_data = malloc(num_records*(sizeof(size_t) + num_fields*sizeof(double)));
+    DataPoint **all_data = malloc(num_records*(sizeof(**all_data) + num_fields*sizeof(double)));
 
     DataPoint *current_data_point;
     char *current_record = NULL;
