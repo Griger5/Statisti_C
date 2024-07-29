@@ -13,16 +13,22 @@ Matrix init_matrix(size_t rows, size_t cols);
 
 void free_matrix(Matrix *matrix);
 
+void print_matrix(const Matrix matrix);
+
+Matrix identity_matrix(size_t N);
+
 Matrix copy_matrix(const Matrix matrix_to_copy);
 
-void subtract_rows(size_t rows, size_t cols, double (*matrix)[cols], size_t row_minuend, size_t row_subtrahend, double multiplier);
+void subtract_rows(Matrix *matrix, size_t row_minuend, size_t row_subtrahend, double multiplier);
 
-void switch_rows(size_t rows, size_t cols, double (*matrix)[cols], size_t row_1, size_t row_2);
+void multiply_row_scalar(Matrix *matrix, size_t row_num, double scalar);
 
-void matrix_multiply(size_t rows_a, size_t cols_a, double (*matrix_a)[cols_a], size_t rows_b, size_t cols_b, double (*matrix_b)[cols_b], double (*result)[cols_b]);
+void switch_rows(Matrix *matrix, size_t row_1, size_t row_2);
 
-double determinant(size_t N, const double (*matrix)[N]);
+Matrix matrix_multiply(const Matrix matrix_a, const Matrix matrix_b);
 
-void invert_matrix(size_t N, const double (*matrix)[N], double (*inverted)[N]);
+double determinant(const Matrix matrix);
+
+Matrix invert_matrix(const Matrix matrix);
 
 #endif
