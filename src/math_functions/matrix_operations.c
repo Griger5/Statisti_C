@@ -33,6 +33,18 @@ void free_matrix(Matrix *matrix) {
     }
 }
 
+Matrix vector_to_matrix(double *vector, size_t length) {
+    Matrix matrix = init_matrix(1, length);
+
+    if (matrix.values != NULL) {
+        for (size_t i = 0; i < length; i++) {
+            matrix.values[0][i] = vector[i];
+        }
+    }
+    
+    return matrix;
+}
+
 void print_matrix(const Matrix matrix) {
     size_t rows = matrix.rows;
     size_t cols = matrix.cols;

@@ -7,7 +7,6 @@
 
 typedef struct _LabeledDataPoint {
     size_t dims;
-    //char label[32];
     int label_num;
     double data[];
 } LabeledDataPoint;
