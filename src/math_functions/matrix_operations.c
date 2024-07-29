@@ -2,12 +2,48 @@
 
 #include "matrix_operations.h"
 
-void copy_matrix(size_t rows, size_t cols, const double (*to_be_copied)[cols], double (*copy)[cols]) {
-    for (size_t i = 0; i < rows; i++) {
-        for (size_t j = 0; j < cols; j++) {
-            copy[i][j] = to_be_copied[i][j];
+Matrix init_matrix(size_t rows, size_t cols) {
+    Matrix matrix;
+    
+    matrix.rows = rows;
+    matrix.cols = cols;
+
+    matrix.values = malloc(rows * sizeof(double *));
+
+    if (matrix.values != NULL) {
+        matrix.values[0] = calloc(rows, cols * sizeof(double));
+
+        if (matrix.values[0] != NULL) {
+            for (size_t i = 1; i < rows; i++) {
+                matrix.values[i] = matrix.values[0] + i*cols;
+            }
+        }
+        else matrix.values = NULL;
+    }
+
+    return matrix;
+}
+
+void free_matrix(Matrix *matrix) {
+    free(matrix->values[0]);
+    free(matrix->values);
+}
+
+Matrix copy_matrix(const Matrix matrix_to_copy) {
+    size_t rows = matrix_to_copy.rows;
+    size_t cols = matrix_to_copy.cols;
+
+    Matrix copy = init_matrix(rows, cols);
+    
+    if (copy.values != NULL) {
+        for (size_t i = 0; i < rows; i++) {
+            for (size_t j = 0; j < cols; j++) {
+                copy.values[i][j] = matrix_to_copy.values[i][j];
+            }
         }
     }
+
+    return copy;
 }
 
 void subtract_rows(size_t rows, size_t cols, double (*matrix)[cols], size_t row_minuend, size_t row_subtrahend, double multiplier) {
@@ -51,7 +87,7 @@ void matrix_multiply(size_t rows_a, size_t cols_a, double (*matrix_a)[cols_a], s
     }
 }
 
-double determinant(size_t N, const double (*matrix)[N]) {   
+/* double determinant(size_t N, const double (*matrix)[N]) {   
     if (N == 1) return matrix[0][0];
 
     if (N == 2) return (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]);
@@ -139,4 +175,4 @@ void invert_matrix(size_t N, const double (*matrix)[N], double (*inverted)[N]) {
     }
 
     free(matrix_copy);
-}
+} */

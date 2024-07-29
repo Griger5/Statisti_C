@@ -3,7 +3,17 @@
 
 #include <stddef.h>
 
-void copy_matrix(size_t rows, size_t cols, const double (*to_be_copied)[cols], double (*copy)[cols]);
+typedef struct _Matrix {
+    size_t rows;
+    size_t cols;
+    double **values;
+} Matrix;
+
+Matrix init_matrix(size_t rows, size_t cols);
+
+void free_matrix(Matrix *matrix);
+
+Matrix copy_matrix(const Matrix matrix_to_copy);
 
 void subtract_rows(size_t rows, size_t cols, double (*matrix)[cols], size_t row_minuend, size_t row_subtrahend, double multiplier);
 
