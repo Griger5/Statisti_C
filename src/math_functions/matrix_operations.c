@@ -33,12 +33,23 @@ void free_matrix(Matrix *matrix) {
     }
 }
 
-Matrix vector_to_matrix(double *vector, size_t length) {
+Matrix nulled_matrix(size_t rows, size_t cols) {
+    Matrix matrix;
+    
+    matrix.rows = rows;
+    matrix.cols = cols;
+
+    matrix.values = NULL;
+
+    return matrix;
+}
+
+Matrix array_to_matrix(double *array, size_t length) {
     Matrix matrix = init_matrix(1, length);
 
     if (matrix.values != NULL) {
         for (size_t i = 0; i < length; i++) {
-            matrix.values[0][i] = vector[i];
+            matrix.values[0][i] = array[i];
         }
     }
     
@@ -84,10 +95,35 @@ Matrix copy_matrix(const Matrix matrix_to_copy) {
     return copy;
 }
 
+double sum_row(const Matrix matrix, size_t row) {
+    size_t cols = matrix.cols;
+
+    double result = 0;
+
+    if (row < matrix.rows) {
+        for (size_t i = 0; i < cols; i++) {
+            result += matrix.values[row][i];
+        }
+    }
+
+    return result;
+}
+
 void subtract_rows(Matrix *matrix, size_t row_minuend, size_t row_subtrahend, double multiplier) {
     if (row_minuend < matrix->rows && row_subtrahend < matrix->rows && row_minuend != row_subtrahend) {
         for (size_t i = 0; i < matrix->cols; i++) {
             matrix->values[row_minuend][i] = matrix->values[row_minuend][i] - multiplier * matrix->values[row_subtrahend][i];
+        }
+    }
+}
+
+void subtract_scalar(Matrix *matrix, double scalar) {
+    size_t rows = matrix->rows;
+    size_t cols = matrix->cols;
+
+    for (size_t i = 0; i < rows; i++) {
+        for (size_t j = 0; j < cols; j++) {
+            matrix->values[i][j] = matrix->values[i][j] - scalar;
         }
     }
 }
@@ -122,9 +158,7 @@ Matrix matrix_multiply(const Matrix matrix_a, const Matrix matrix_b) {
     Matrix result;
     
     if (matrix_a.cols != matrix_b.rows) {
-        result.rows = rows;
-        result.cols = cols;
-        result.values = NULL;
+        result = nulled_matrix(rows, cols);
 
         return result;
     }
@@ -137,6 +171,31 @@ Matrix matrix_multiply(const Matrix matrix_a, const Matrix matrix_b) {
                 for (size_t k=0; k < rows; k++) {
                     result.values[row][col] += matrix_a.values[row][k] * matrix_b.values[k][col];
                 }
+            }
+        }
+    }
+
+    return result;
+}
+
+Matrix matrix_multiply_elements(const Matrix matrix_a, const Matrix matrix_b) {
+    size_t rows = matrix_a.rows;
+    size_t cols = matrix_a.cols;
+
+    Matrix result;
+    
+    if (matrix_a.rows != matrix_b.rows || matrix_a.cols != matrix_b.cols) {
+        result = nulled_matrix(rows, cols);
+
+        return result;
+    }
+
+    result = init_matrix(rows, cols);
+
+    if (result.values != NULL) {
+        for(size_t row = 0; row < rows; row++) {
+            for(size_t col = 0; col < cols; col++) {
+                result.values[row][col] = matrix_a.values[row][col] * matrix_b.values[row][col];
             }
         }
     }
@@ -198,10 +257,7 @@ double determinant(const Matrix matrix) {
 }
 
 Matrix invert_matrix(const Matrix matrix) {
-    Matrix nulled;
-    nulled.rows = matrix.rows;
-    nulled.cols = matrix.cols;
-    nulled.values = NULL;
+    Matrix nulled = nulled_matrix(matrix.rows, matrix.cols);
     
     if (matrix.rows != matrix.cols || determinant(matrix) == 0) return nulled;
 
