@@ -152,12 +152,40 @@ void switch_rows(Matrix *matrix, size_t row_1, size_t row_2) {
 }
 
 Matrix matrix_multiply(const Matrix matrix_a, const Matrix matrix_b) {
-    size_t rows = matrix_a.rows;
-    size_t cols = matrix_b.cols;
+    size_t rows_a = matrix_a.rows;
+    size_t cols_a = matrix_a.cols;
+    size_t cols_b = matrix_b.cols;
 
     Matrix result;
     
     if (matrix_a.cols != matrix_b.rows) {
+        result = nulled_matrix(rows_a, cols_b);
+
+        return result;
+    }
+
+    result = init_matrix(rows_a, cols_b);
+
+    if (result.values != NULL) {
+        for(size_t row = 0; row < rows_a; row++) {
+            for(size_t col = 0; col < cols_b; col++) {
+                for (size_t k = 0; k < cols_a; k++) {
+                    result.values[row][col] += matrix_a.values[row][k] * matrix_b.values[k][col];
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+Matrix matrix_subtract_elements(const Matrix matrix_a, const Matrix matrix_b) {
+    size_t rows = matrix_a.rows;
+    size_t cols = matrix_a.cols;
+
+    Matrix result;
+    
+    if (matrix_a.rows != matrix_b.rows || matrix_a.cols != matrix_b.cols) {
         result = nulled_matrix(rows, cols);
 
         return result;
@@ -168,9 +196,7 @@ Matrix matrix_multiply(const Matrix matrix_a, const Matrix matrix_b) {
     if (result.values != NULL) {
         for(size_t row = 0; row < rows; row++) {
             for(size_t col = 0; col < cols; col++) {
-                for (size_t k=0; k < rows; k++) {
-                    result.values[row][col] += matrix_a.values[row][k] * matrix_b.values[k][col];
-                }
+                result.values[row][col] = matrix_a.values[row][col] - matrix_b.values[row][col];
             }
         }
     }

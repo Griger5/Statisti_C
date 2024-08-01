@@ -33,6 +33,8 @@ void switch_rows(Matrix *matrix, size_t row_1, size_t row_2);
 
 Matrix matrix_multiply(const Matrix matrix_a, const Matrix matrix_b);
 
+Matrix matrix_subtract_elements(const Matrix matrix_a, const Matrix matrix_b);
+
 Matrix matrix_multiply_elements(const Matrix matrix_a, const Matrix matrix_b);
 
 double determinant(const Matrix matrix);
