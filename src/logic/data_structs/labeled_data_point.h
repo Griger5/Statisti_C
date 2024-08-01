@@ -3,20 +3,15 @@
 
 #include <stdio.h>
 
+#include "data_point.h"
 #include "../../utils/label_list.h"
 
-typedef struct _LabeledDataPoint {
-    size_t dims;
-    int label_num;
-    double data[];
-} LabeledDataPoint;
+void print_labeled_data(DataPoint *);
 
-void print_labeled_data(LabeledDataPoint *);
+DataPoint *create_labeled_datapoint_csv(char *, size_t, LabelList *);
 
-LabeledDataPoint *create_labeled_data_point(char *, size_t, LabelList *);
+DataSet load_labeled_data_csv(FILE *, size_t, size_t, LabelList *);
 
-LabeledDataPoint **load_labeled_data_csv(FILE *, size_t, size_t, LabelList *);
-
-void free_all_labeled_data(LabeledDataPoint **, size_t);
+void free_all_labeled_data(DataSet, size_t);
 
 #endif

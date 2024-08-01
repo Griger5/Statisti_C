@@ -3,7 +3,7 @@
 
 #include "../data_structs/data_point.h"
 
-double SLR_slope(DataPoint **, size_t);
-double SLR_y_intercept(DataPoint **, size_t, double);
+double SLR_slope(DataSet);
+double SLR_y_intercept(DataSet, double);
 
 #endif

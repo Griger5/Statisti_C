@@ -1,7 +1,6 @@
 #include <math.h>
 
 #include "prob_den_funcs.h"
-//#include "matrix_operations.h"
 
 double normal_pdf(const double mean, const double std_dev, const double input) {
     double normalization_factor = 1/sqrt(2*M_PI*pow(std_dev, 2.0));
@@ -10,7 +9,7 @@ double normal_pdf(const double mean, const double std_dev, const double input) {
 
     return value*normalization_factor;
 }
-#include <stdio.h>
+
 double multi_var_normal_pdf(const Matrix mean_vector, const Matrix covariance_matrix, const Matrix input_vector) {
     if (mean_vector.cols != input_vector.cols || input_vector.cols != covariance_matrix.rows) return NAN;
 
@@ -26,7 +25,7 @@ double multi_var_normal_pdf(const Matrix mean_vector, const Matrix covariance_ma
     Matrix invcov_multi_diff = matrix_multiply(mean_input_diff, inverse_covar);    
     Matrix invcov_multi_diff2 = matrix_multiply_elements(invcov_multi_diff, mean_input_diff);
 
-    double sum = sum_row(invcov_multi_diff, 0);
+    double sum = sum_row(invcov_multi_diff2, 0);
 
     double exponent = -0.5 * sum;
 

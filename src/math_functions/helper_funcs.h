@@ -6,10 +6,10 @@
 #include "../logic/data_structs/data_point.h"
 #include "matrix_operations.h"
 
-double sum_data_1d(DataPoint **,  size_t, int);
+double sum_data_1d(DataSet, int);
 
-double mean_arith_data(DataPoint **, size_t, int);
+double mean_arith_data(DataSet, int);
 
-Matrix data_mean_diff(DataPoint **, size_t, int);
+Matrix data_mean_diff(DataSet, int);
 
 #endif

@@ -6,51 +6,55 @@
 
 void print_data(DataPoint *a) {
     for (size_t i = 0; i<a->dims; i++) {
-        printf("%f\n", a->data[i]);
+        printf("%f\n", a->values[i]);
     }
 }
 
-DataPoint *create_data_point(char *data, size_t dims) {
+DataPoint *create_datapoint_csv(char *data, size_t field_count) {
     char *token;
-    DataPoint *point = malloc(sizeof(*point) + dims*sizeof(double));
+    DataPoint *point = malloc(sizeof(DataPoint) + field_count*sizeof(double));
     
-    point->dims = dims;
+    point->dims = field_count;
+    point->label_num = -1;
 
     token = strtok(data, ",");
-    point->data[0] = atof(token);
+    point->values[0] = atof(token);
 
-    for (size_t i = 1; i < dims; i++) {
+    for (size_t i = 1; i < field_count; i++) {
         token = strtok(NULL, ",");
-        point->data[i] = atof(token);
+        point->values[i] = atof(token);
     }
 
     return point;
 }
 
-DataPoint **load_data_csv(FILE *file, size_t num_records, size_t num_fields) {
-    DataPoint **all_data = malloc(num_records*(sizeof(**all_data) + num_fields*sizeof(double)));
+DataSet load_data_csv(FILE *file, size_t rec_count, size_t field_count) {
+    DataSet all_data;
+    all_data.rec_count = rec_count;
+    all_data.field_count = field_count;
+    all_data.data = malloc(rec_count*(sizeof(DataPoint) + field_count*sizeof(double)));
 
     DataPoint *current_data_point;
     char *current_record = NULL;
     size_t n = 0;
     int chars_num;
 
-    for (size_t i = 0; i < num_records; i++) {
+    for (size_t i = 0; i < rec_count; i++) {
         chars_num = getline(&current_record, &n, file);
         if (chars_num != -1) {
-            current_data_point = create_data_point(current_record, num_fields);
+            current_data_point = create_datapoint_csv(current_record, field_count);
         }
-        all_data[i] = current_data_point;
+        all_data.data[i] = current_data_point;
     }
     free(current_record);
 
     return all_data;
 }
 
-void free_all_data(DataPoint **data, size_t num_records) {
-    for (size_t i = 0; i < num_records; i++) {
-        free(data[i]);
+void free_all_data(DataSet data_set) {
+    size_t rec_count = data_set.rec_count;
+    
+    for (size_t i = 0; i < rec_count; i++) {
+        free(data_set.data[i]);
     }
-
-    free(data);
 }
