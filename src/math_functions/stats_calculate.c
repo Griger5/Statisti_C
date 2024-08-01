@@ -36,3 +36,23 @@ double std_covar_popul(DataPoint **data, size_t rec_count, int dim1, int dim2) {
 
     return sum_of_multiplied/rec_count;
 }
+
+Matrix std_covar_matrix(DataPoint **data, size_t rec_count) {
+    size_t dims = (*data)->dims;
+
+    Matrix covar_matrix = init_matrix(dims, dims);
+
+    for (size_t i = 0; i < dims; i++) {
+        for (size_t j = i; j < dims; j++) {
+            covar_matrix.values[i][j] = std_covar_popul(data, rec_count, i, j);
+        }
+    }
+
+    for (size_t i = 0; i < dims; i++) {
+        for (size_t j = i; j < dims; j++) {
+            covar_matrix.values[j][i] = covar_matrix.values[i][j];
+        }
+    }
+
+    return covar_matrix;
+}
