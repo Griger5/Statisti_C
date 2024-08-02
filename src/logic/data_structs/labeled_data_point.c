@@ -75,11 +75,7 @@ DataSet load_labeled_data_csv(FILE *file, size_t rec_count, size_t field_count, 
         n = 0;
     }
 
-    return all_data;
-}
+    all_data.label_count = label_list->size;
 
-void free_all_labeled_data(DataSet data_set, size_t rec_count) {
-    for (size_t i = 0; i < rec_count; i++) {
-        free(data_set.data[i]);
-    }
+    return all_data;
 }

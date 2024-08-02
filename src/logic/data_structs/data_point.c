@@ -32,6 +32,7 @@ DataSet load_data_csv(FILE *file, size_t rec_count, size_t field_count) {
     DataSet all_data;
     all_data.rec_count = rec_count;
     all_data.field_count = field_count;
+    all_data.label_count = 0;
     all_data.data = malloc(rec_count*(sizeof(DataPoint) + field_count*sizeof(double)));
 
     DataPoint *current_data_point;
@@ -51,10 +52,12 @@ DataSet load_data_csv(FILE *file, size_t rec_count, size_t field_count) {
     return all_data;
 }
 
-void free_all_data(DataSet data_set) {
+void free_dataset(DataSet data_set) {
     size_t rec_count = data_set.rec_count;
     
     for (size_t i = 0; i < rec_count; i++) {
         free(data_set.data[i]);
     }
+
+    free(data_set.data);
 }

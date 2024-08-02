@@ -12,6 +12,7 @@ typedef struct _DataPoint {
 typedef struct _DataSet {
     size_t rec_count;
     size_t field_count;
+    size_t label_count;
     DataPoint **data;
 } DataSet;
 
@@ -21,6 +22,6 @@ DataPoint *create_datapoint_csv(char *, size_t);
 
 DataSet load_data_csv(FILE *, size_t, size_t);
 
-void free_all_data(DataSet);
+void free_dataset(DataSet);
 
 #endif
