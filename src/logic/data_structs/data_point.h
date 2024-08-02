@@ -18,10 +18,14 @@ typedef struct _DataSet {
 
 void print_data(DataPoint *);
 
+DataPoint *copy_datapoint(const DataPoint *to_copy);
+
 DataPoint *create_datapoint_csv(char *, size_t);
 
 DataSet load_data_csv(FILE *, size_t, size_t);
 
 void free_dataset(DataSet);
+
+void free_array_of_datasets(DataSet *array, size_t length);
 
 #endif

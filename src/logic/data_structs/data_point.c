@@ -10,6 +10,22 @@ void print_data(DataPoint *a) {
     }
 }
 
+DataPoint *copy_datapoint(const DataPoint *to_copy) {
+    size_t field_count = to_copy->dims;
+
+    DataPoint *point = malloc(sizeof(DataPoint) + field_count*sizeof(double));
+
+    if (point != NULL) {
+        point->dims = field_count;
+        point->label_num = to_copy->label_num;
+        for (size_t i = 0; i < field_count; i++) {
+            point->values[i] = to_copy->values[i];
+        }
+    }
+
+    return point;
+}
+
 DataPoint *create_datapoint_csv(char *data, size_t field_count) {
     char *token;
     DataPoint *point = malloc(sizeof(DataPoint) + field_count*sizeof(double));
@@ -61,3 +77,11 @@ void free_dataset(DataSet data_set) {
 
     free(data_set.data);
 }
+
+void free_array_of_datasets(DataSet *array, size_t length) {
+    for (size_t i = 0; i < length; i++) {
+        free_dataset(array[i]);
+    }
+
+    free(array);
+}   

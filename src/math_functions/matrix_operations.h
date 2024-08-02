@@ -13,6 +13,8 @@ Matrix init_matrix(size_t rows, size_t cols);
 
 void free_matrix(Matrix *matrix);
 
+Matrix nulled_matrix(size_t rows, size_t cols);
+
 Matrix array_to_matrix(double *array, size_t length);
 
 void print_matrix(const Matrix matrix);

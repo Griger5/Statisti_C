@@ -56,7 +56,7 @@ DataSet load_labeled_data_csv(FILE *file, size_t rec_count, size_t field_count, 
     DataSet all_data;
 
     all_data.rec_count = rec_count;
-    all_data.field_count = field_count; 
+    all_data.field_count = field_count-1; 
     all_data.data = malloc(rec_count*(sizeof(DataPoint) + field_count*sizeof(double)));
 
     DataPoint *current_data_point;
@@ -78,4 +78,38 @@ DataSet load_labeled_data_csv(FILE *file, size_t rec_count, size_t field_count, 
     all_data.label_count = label_list->size;
 
     return all_data;
+}
+
+DataSet split_label(const DataSet data_set, int label_to_separate) {
+    DataSet splitted;
+
+    if (data_set.label_count == 0) {
+        splitted.data = NULL;
+
+        return splitted;
+    }
+
+    size_t rec_count = data_set.rec_count;
+    size_t field_count = data_set.field_count;
+    size_t new_rec_count = 0;
+
+    splitted.data = malloc(rec_count*(sizeof(DataPoint) + field_count*sizeof(double)));
+    
+    for (size_t i = 0; i < rec_count; i++) {
+        if (data_set.data[i]->label_num == label_to_separate) {
+            splitted.data[new_rec_count] = copy_datapoint(data_set.data[i]);
+            new_rec_count++;
+        }
+    }
+
+    splitted.rec_count = new_rec_count;
+    splitted.label_count = 1;
+
+    DataPoint **temp = realloc(splitted.data, new_rec_count*(sizeof(DataPoint) + field_count*sizeof(double)));
+    if (temp != NULL) {
+        splitted.data = temp;
+    }
+    else splitted.data = NULL;
+
+    return splitted;
 }
