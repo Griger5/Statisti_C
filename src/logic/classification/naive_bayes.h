@@ -8,4 +8,8 @@ Matrix *naive_bayes_train(const DataSet data_set);
 
 int naive_bayes_classify(const Matrix input_vector, const Matrix *parameter_key);
 
+void naive_bayes_classify_dataset(DataSet data_set, const Matrix *parameter_key);
+
+void naive_bayes_free_key(Matrix *parameter_key);
+
 #endif
