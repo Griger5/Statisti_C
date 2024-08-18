@@ -1,12 +1,15 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra
 LIBS = -lm
 
-run: clean data_point.o labeled_data_point.o lin_reg.o naive_bayes.o matrix_operations.o stats_calculate.o prob_den_funcs.o file_operation.o label_list.o temp_main.o
-	$(CC) $(CFLAGS) -o run build/data_point.o build/labeled_data_point.o build/lin_reg.o build/naive_bayes.o build/matrix_operations.o build/helper_funcs.o build/stats_calculate.o build/prob_den_funcs.o build/file_operation.o build/label_list.o build/temp_main.o $(LIBS)
+run: clean data_point.o labeled_data_point.o standard_plot.o lin_reg.o naive_bayes.o matrix_operations.o stats_calculate.o prob_den_funcs.o file_operation.o label_list.o temp_main.o
+	$(CC) $(CFLAGS) -o run build/data_point.o build/labeled_data_point.o build/standard_plot.o build/lin_reg.o build/naive_bayes.o build/matrix_operations.o build/helper_funcs.o build/stats_calculate.o build/prob_den_funcs.o build/file_operation.o build/label_list.o build/temp_main.o $(LIBS)
 
 temp_main.o:
 	$(CC) $(CFLAGS) -c src/temp_main.c -o build/temp_main.o
+
+standard_plot.o:
+	$(CC) $(CFLAGS) -c src/plotting/standard_plot.c -o build/standard_plot.o
 
 lin_reg.o:
 	$(CC) $(CFLAGS) -c src/logic/regression/lin_reg.c -o build/lin_reg.o
