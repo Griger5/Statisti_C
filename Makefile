@@ -1,15 +1,24 @@
 CC = gcc
-CFLAGS = -Wall -Wextra
-LIBS = -lm
+CFLAGS = -Wall -Wextra `pkg-config --cflags gtk4`
+LIBS = -lm `pkg-config --libs gtk4`
 
-run: clean data_point.o labeled_data_point.o standard_plot.o lin_reg.o naive_bayes.o matrix_operations.o stats_calculate.o prob_den_funcs.o file_operation.o label_list.o temp_main.o
-	$(CC) $(CFLAGS) -o run build/data_point.o build/labeled_data_point.o build/standard_plot.o build/lin_reg.o build/naive_bayes.o build/matrix_operations.o build/helper_funcs.o build/stats_calculate.o build/prob_den_funcs.o build/file_operation.o build/label_list.o build/temp_main.o $(LIBS)
+run: clean data_point.o global_var.o temp_ui.o labeled_data_point.o standard_plot.o regression_plot.o lin_reg.o naive_bayes.o matrix_operations.o stats_calculate.o prob_den_funcs.o file_operation.o label_list.o main.o
+	$(CC) $(CFLAGS) -o run build/data_point.o build/global_var.o build/temp_ui.o build/labeled_data_point.o build/standard_plot.o build/regression_plot.o build/lin_reg.o build/naive_bayes.o build/matrix_operations.o build/helper_funcs.o build/stats_calculate.o build/prob_den_funcs.o build/file_operation.o build/label_list.o build/main.o $(LIBS)
 
-temp_main.o:
-	$(CC) $(CFLAGS) -c src/temp_main.c -o build/temp_main.o
+main.o:
+	$(CC) $(CFLAGS) -c src/main.c -o build/main.o
+
+global_var.o:
+	$(CC) $(CFLAGS) -c src/gui/global_var.c -o build/global_var.o
+
+temp_ui.o:
+	$(CC) $(CFLAGS) -c src/gui/temp_ui.c -o build/temp_ui.o
 
 standard_plot.o:
 	$(CC) $(CFLAGS) -c src/plotting/standard_plot.c -o build/standard_plot.o
+
+regression_plot.o:
+	$(CC) $(CFLAGS) -c src/plotting/regression_plot.c -o build/regression_plot.o
 
 lin_reg.o:
 	$(CC) $(CFLAGS) -c src/logic/regression/lin_reg.c -o build/lin_reg.o

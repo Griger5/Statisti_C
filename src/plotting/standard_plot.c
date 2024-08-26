@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "standard_plot.h"
 
@@ -18,6 +19,10 @@ MultiPlot init_multiplot(void) {
     to_plot.plots = NULL;
 
     return to_plot;
+}
+
+void free_multiplot(MultiPlot *multiplot) {
+    free(multiplot->plots);
 }
 
 void add_dataset_to_temp_file(const DataSet data_set, size_t dim_to_plot1, size_t dim_to_plot2) {
@@ -50,6 +55,10 @@ void add_plot_to_multiplot(MultiPlot *multiplot, char *plot) {
         return;
     }
 
+    for (size_t i = 0; i < curr_size; i++) {
+        if (strcmp(plot, multiplot->plots[i]) == 0) return;
+    }
+
     char **temp = realloc(multiplot->plots, (curr_size+1)*sizeof(char*));
 
     if (temp != NULL) {
@@ -65,14 +74,6 @@ void add_temp_file_to_multiplot(MultiPlot *multiplot) {
     add_plot_to_multiplot(multiplot, "'build/data.temp' pointtype 7");
 }
 
-void add_linreg_to_multiplot(MultiPlot *multiplot, double slope, double y_intercept) {
-    char buffer[100];
-
-    snprintf(buffer, 100, "%f*x+%f", slope, y_intercept);
-
-    add_plot_to_multiplot(multiplot, buffer);
-}
-
 void plot_multiplot(FILE* gnupipe, const MultiPlot multiplot) {
     size_t size = multiplot.size;
 
@@ -85,4 +86,5 @@ void plot_multiplot(FILE* gnupipe, const MultiPlot multiplot) {
     }
 
     fprintf(gnupipe, "\n");
+    fflush(gnupipe);
 }
